@@ -1,5 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.template import Template, Context
+from django.shortcuts import render
 import datetime
 
 def hello(request):
@@ -18,37 +19,14 @@ def home_page(request):
     """
     return HttpResponse(html)
 
-def current_datetime(response):
+def current_datetime(request):
     now = datetime.datetime.now()
-    t = Template("""
-        <!DOCTYPE html>
-        <head>
-            <title>Django test</title>
-        </head>
-        <body>
-            <h1>Getting Started with Django</h1>
-            <p>It is now {{ current_date }}</p>
-        </body>
-    """)
-    html = t.render(Context({'current_date':now}))
-    return HttpResponse(html)
+    return render(request, 'current_datetime.html', {'current_date':now})
 
 def hours_ahead(request, offset):
     try:
         offset = int(offset)
     except ValueError:
         raise Http404()
-    dt = datetime.datetime.now()+datetime.timedelta(hours=offset)
-    t = Template("""
-         <!DOCTYPE html>
-        <head>
-            <title>Django test</title>
-        </head>
-        <body>
-            <h1>Getting Started with Django</h1>
-            <p>It is now {{ current_date }} in UTC+{{ timezone }}</p>
-        </body>
-    """)
-    html = t.render(Context({'current_date':dt, 'timezone':offset}))
-    return HttpResponse(html)
-
+    next_time = datetime.datetime.now()+datetime.timedelta(hours=offset)
+    return render(request, 'hours_ahead.html', {'hour_offset':offset, 'next_time':next_time})
