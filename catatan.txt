@@ -1,0 +1,7 @@
+menjalankan server:
+    python manage.py runserver
+
+menginisialisasi database dari model ke database engine atau menmbuat perubahan di database
+    python manage.py makemigrations
+    python manage.py syncdb
+
